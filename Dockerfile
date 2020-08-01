@@ -7,12 +7,13 @@ ENV PGUSER gisuser
 ENV PGPASSWORD password
 ENV CACHE 400
 ENV NUMPROCESSES 2
-RUN echo "============== Installing dependencies ===================" \
+ENV TZ=Europe/Stockholm
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
+  && echo "============== Installing dependencies ===================" \
   && echo " " \
   && apt-get update \
   && apt-get install -y git \
   && apt-get install -y wget \
-  && apt-get install -y install \
   && apt-get install -y make \
   && apt-get install -y cmake \
   && apt-get install -y g++ \
@@ -30,15 +31,14 @@ RUN echo "============== Installing dependencies ===================" \
   && echo "============ Installing OSM2PGSQL =========================" \
   && echo " " \
   && git clone git://github.com/openstreetmap/osm2pgsql.git \
-  && cd osm2pgsql \
-  && mkdir build \
-  && cd build \
-  && cmake .. \
+  && mkdir osm2pgsql/build
+WORKDIR osm2pgsql/build
+RUN cmake .. \
   && make \
-  && make install \
-  && cd / \
-  && rm -r osm2pgsql \
-  && echo " " \
+  && make install
+WORKDIR /
+RUN rm -r osm2pgsql \
+  &&echo " " \
   && echo "============ Creating Userdirectory =========================" \
   && echo " " \
   && mkdir userdirectory
