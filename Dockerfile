@@ -36,8 +36,8 @@ RUN echo "============== Installing dependencies ===================" \
   && cmake .. \
   && make \
   && make install \
-  && cd /
-  && rm - r osm2pgsql \
+  && cd / \
+  && rm -r osm2pgsql \
   && echo " " \
   && echo "============ Creating Userdirectory =========================" \
   && echo " " \
