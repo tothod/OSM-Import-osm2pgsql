@@ -1,5 +1,6 @@
 FROM ubuntu
 ENV PBFlink https://download.geofabrik.de/asia/thailand-latest.osm.pbf
+ENV StyleFile default.style
 ENV DBHost localhost
 ENV DBPort 5432
 ENV DBName gis
@@ -41,8 +42,10 @@ RUN rm -r osm2pgsql \
   &&echo " " \
   && echo "============ Creating Userdirectory =========================" \
   && echo " " \
-  && mkdir userdirectory
-COPY run.sh /userdirectory/
+  && mkdir userdirectory \
+  && mkdir default
+COPY default.style /default/*
+COPY run.sh /run.sh
 VOLUME /userdirectory
-WORKDIR /userdirectory
+WORKDIR /
 CMD ["/bin/bash", "run.sh"]
